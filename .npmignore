@@ -6,7 +6,7 @@ node_modules
 .module-cache
 *.log*
 src
-livedoc
+sandbox
 .idea
 package-lock.json
 __tests__

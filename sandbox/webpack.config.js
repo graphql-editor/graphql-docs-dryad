@@ -28,7 +28,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
-        options: { configFile: 'livedoc/tsconfig.json' },
+        options: { configFile: 'sandbox/tsconfig.json' },
       },
       { test: /\.(png|svg)$/, use: 'url-loader?limit=10000' },
       { test: /\.(jpg|gif|graphql|gql|ttf)$/, use: 'file-loader' },

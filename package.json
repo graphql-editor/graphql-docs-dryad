@@ -4,7 +4,7 @@
   "description": "Dryad livedoc",
   "main": "lib/index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./livedoc/webpack.config.js --content-base ./livedoc/ --port 1456 --hot --inline --open",
+    "start": "webpack-dev-server --config ./sandbox/webpack.config.js --content-base ./sandbox/ --port 1456 --hot --inline --open",
     "build": "tsc --build"
   },
   "repository": {
