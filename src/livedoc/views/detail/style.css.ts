@@ -1,24 +1,66 @@
 export const css = `
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
     :root {
-        --grey100: #FFFFFF;
-        --grey90: #E6E6E6;
-        --grey80: #CCCCCC;
-        --grey70: #B3B3B3;
-        --grey40: #666666;
-        --grey20: #333333;
-        --grey10: #1A1A1A;
-        --grey0_1: #0D0D0D;
-        --grey0: #030303;
-        --green100: #31FFC8;
-        --blue100: #30C1FF;
-        --yellow100: #FED531;
         --pink100: #FF59C5;
+        --grey0:#F3F3F4;
+        --grey1:#E5E5E5;
+        --grey2:#CCCCCC;
+        --grey3:#B2B2B2;
+        --grey4:#999999;
+        --grey5:#808080;
+        --grey6:#666666;
+        --grey7:#4D4D4D;
+        --grey8:#333333;
+        --grey9:#1A1A1A;
+        --grey95:#0d0d0d;
+        --grey10:#000000;
+        --main0:#d966ff;
+        --main1:#c45ce6;
+        --main2:#b053cd;
+        --main3:#9b49b3;
+        --main4:#873f9a;
+        --main5:#723681;
+        --main6:#5d2c68;
+        --main7:#49224f;
+        --main8:#341835;
+        --main85:#200f1c;
+        --main9:#0b050d;
+        --main95:#060307;
+       --green0:#acf7c1;
+        --green1:#9ce0af;
+        --green2:#8cc99d;
+        --green3:#7bb18b;
+        --green4:#6b9a79;
+        --green5:#5b8367;
+        --green6:#4b6c54;
+        --yellow0:#cfee9e;
+        --yellow1:#bcd88f;
+        --yellow2:#a8c180;
+        --yellow3:#95ab72;
+        --yellow4:#819563;
+        --yellow5:#6e7f54;
+        --yellow6:#5b6845;
+        --red0:#de3c4b;
+        --red1:#c93644;
+        --red2:#b5313d;
+        --red3:#a02b36;
+        --red4:#8b262f;
+        --red5:#772028;
+        --red6:#621a21;
+        --blue0:#17bebb;
+        --blue1:#15adaa;
+        --blue2:#139c99;
+        --blue3:#118b89;
+        --blue4:#0f7a78;
+        --blue5:#0d6967;
+        --blue6:#0a5756;
+        --blue7:#084645;
+        --top-bar-height:50px;
 
         --light: 300;
         --normal: 400;
         --bold: 700;
-    }
+       }
 
     html {
         box-sizing: border-box;
@@ -61,7 +103,7 @@ export const css = `
     }
 
     p {
-        color: var(--grey70);
+        color: var(--grey3);
         font-weight: var(--light);
     }
 
@@ -73,7 +115,7 @@ export const css = `
         font-size: 1.75rem;
         font-weight: var(--bold);
         line-height: 1.16;
-        color: var(--grey70);
+        color: var(--grey3);
     }
 
     h2 {
@@ -82,7 +124,7 @@ export const css = `
     }
 
     h3 {
-        color: var(--grey70);
+        color: var(--grey3);
         font-size: 1.25rem;
         font-weight: var(--bold);
         line-height: 1.18;
@@ -92,7 +134,7 @@ export const css = `
     h4 {
         font-size: 0.75rem;
         margin: 0 0 0.5rem 0;
-        color: var(--grey40);
+        color: var(--grey6);
         text-transform: uppercase;
     }
 
@@ -104,12 +146,12 @@ export const css = `
         position: relative;
         display: flex;
         flex-direction: column;
-        background: var(--grey0_1);
+        background: var(--main9);
         font-family: "Roboto", sans-serif;
         font-size: 16px;
         font-weight: var(--normal);
         line-height: 1.5;
-        color: var(--grey100);
+        color: var(--grey0);
         height: 100%;
         overflow: hidden;
     }
@@ -120,7 +162,7 @@ export const css = `
         width: 100%;
         max-height: 100%;
         order: 0;
-        background: var(--grey0);
+        background: var(--main9);
         word-break: break-all;
         padding-bottom: 2rem;
         box-shadow: 0.25rem 0.25rem 1rem rgba(0, 0, 0, 0.25);
@@ -138,25 +180,25 @@ export const css = `
     .Menu,
     .Query,
     .__Type {
-        scrollbar-color: var(--grey20) var(--grey10);
+        scrollbar-color: var(--main85) var(--main9);
     }
 
     .Menu::-webkit-scrollbar,
     .Query::-webkit-scrollbar,
     .__Type::-webkit-scrollbar {
-        background: var(--grey10);
+        background: var(--main9);
     }
 
     .Menu::-webkit-scrollbar-track,
     .Query::-webkit-scrollbar-track,
     .__Type::-webkit-scrollbar-track {
-        background: var(--grey10);
+        background: var(--main9);
     }
 
     .Menu::-webkit-scrollbar-thumb,
     .Query::-webkit-scrollbar-thumb,
     .__Type::-webkit-scrollbar-thumb {
-        background: var(--grey0);
+        background: var(--main85);
     }
 
     .Menu .MenuHeader {
@@ -170,7 +212,7 @@ export const css = `
     }
 
     .Menu .MenuSection:not(:last-child) {
-        border-bottom: 1px solid var(--grey10);
+        border-bottom: 1px solid var(--grey9);
     }
 
     .Menu .Logo {
@@ -184,11 +226,11 @@ export const css = `
         display: block;
         font-size: 0.875rem;
         line-height: 2.3;
-        color: var(--grey90);
+        color: var(--grey1);
     }
 
     .Link:hover {
-        color: var(--green100);
+        color: var(--green0);
     }
 
     .Link.Active::before {
@@ -199,12 +241,12 @@ export const css = `
         left: 0;
         width: 0.1875rem;
         height: 100%;
-        background: var(--green100);
+        background: var(--green0);
     }
 
     .Link.Active {
         font-weight: var(--bold);
-        color: var(--grey100);
+        color: var(--main0);
         padding-left: 0.625rem;
     }
 
@@ -226,7 +268,7 @@ export const css = `
         order: 2;
         font-size: 0.875rem;
         margin-bottom: 1.25rem;
-        color: var(--green100);
+        color: var(--green0);
         font-weight: var(--bold);
     }
 
@@ -239,13 +281,13 @@ export const css = `
         font-size: 1.75rem;
         font-weight: var(--bold);
         line-height: 1.16;
-        color: var(--grey70);
+        color: var(--grey3);
         margin-bottom: 0.125rem;
     }
 
     .__Type-description {
         order: 3;
-        color: var(--grey70);
+        color: var(--grey3);
         font-weight: var(--light);
         margin-bottom: 2rem;
     }
@@ -267,7 +309,8 @@ export const css = `
         max-width: 40rem;
         width: 100%;
         padding: 1rem;
-        background: var(--grey10);
+        background: var(--main85);
+        border-radius:5px;
     }
 
     .Field:not(:last-child) {
@@ -280,7 +323,7 @@ export const css = `
     }
 
     .FieldType {
-        color: var(--yellow100);
+        color: var(--yellow0);
         font-weight: var(--bold);
     }
 
@@ -299,7 +342,7 @@ export const css = `
     }
 
     .FieldName--field {
-        color: var(--blue100)
+        color: var(--blue0)
     }
 
     .FieldName--enum {
@@ -307,12 +350,12 @@ export const css = `
     }
 
     .FieldName--unionType {
-        color: var(--green100);
+        color: var(--green0);
     }
 
     a.FieldName:hover,
     a.FieldType:hover {
-        color: var(--grey100);
+        color: var(--grey0);
     }
 
     .ArgumentName {
@@ -320,7 +363,7 @@ export const css = `
     }
 
     .FieldDescription {
-        color: var(--grey70);
+        color: var(--grey3);
         font-weight: var(--light);
     }
 
@@ -334,7 +377,7 @@ export const css = `
     .TableOfContentsLink {
         position: relative;
         display: inline-flex;
-        color: var(--blue100);
+        color: var(--blue0);
         font-weight: var(--bold);
         margin-bottom: 0.5rem;
         margin-left: 0.875rem;
@@ -363,12 +406,12 @@ export const css = `
         height: 0.1875rem;
         position: relative;
         transform-origin: 1px center;
-        background: var(--grey100);
+        background: var(--grey0);
         transition: width .170s ease, transform .3s ease-in-out, background .270s;
     }
 
     burger-menu:hover burger-bar {
-        background: var(--yellow100);
+        background: var(--yellow0);
     }
 
     burger-bar:first-child {
