@@ -218,7 +218,6 @@ export const css = `
     .Menu .Logo {
         width: 100%;
         max-width: 10.25rem;
-        filter: invert(100%) brightness(150%);
     }
 
     .Link {
