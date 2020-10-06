@@ -1,6 +1,6 @@
 {
   "name": "graphql-dryad-docs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Dryad livedoc",
   "main": "lib/index.js",
   "scripts": {
