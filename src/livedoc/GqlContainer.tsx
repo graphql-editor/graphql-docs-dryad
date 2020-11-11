@@ -117,6 +117,18 @@ export const GqlContainer = ({
         }}
       />
       <style>{CssReplace(css, operation)}</style>
+      <div
+        style={{ display: 'contents' }}
+        dangerouslySetInnerHTML={{
+          __html: DryadElementPlain({
+            withLabels,
+            parent: operation,
+            o: response,
+            dryad: { render: dryad(operation) },
+          }),
+        }}
+      />
+      <style>{CssReplace(css, operation)}</style>
     </>
   );
 };

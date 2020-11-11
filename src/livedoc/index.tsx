@@ -1,102 +1,121 @@
 import React, { useState, useEffect } from 'react';
 import DetailView from './views/detail';
 import zip from 'jszip';
-import { RenderToHTML } from '../ssg';
 import { saveAs } from 'file-saver';
-import { GqlContainer } from './GqlContainer';
 import { CssReplace } from './CssReplace';
 import { DocSkeletonStatic } from './DocSkeleton';
+import {
+  AllTypes,
+  OperationType,
+  Parser,
+  TypeDefinition,
+  TypeSystemDefinition,
+} from 'graphql-zeus';
+import { RenderSideBar, RenderType } from './views/detail/html';
+import { Colors } from '../Colors';
 export interface LiveDocProps {
-  url: string;
-  initial: string;
+  schema: string;
+  active?: string;
 }
 export interface LiveDocExportProps {
-  url: string;
+  schema: string;
   name?: string;
 }
-export const LiveDoc = ({ url, initial }: LiveDocProps) => {
-  const [currentType, setCurrentType] = useState(initial);
+
+export const LiveDocMain = ({ schema, active }: LiveDocProps) => {
+  const tree = Parser.parse(schema);
+  const getNodesByType = (t: AllTypes) => {
+    return tree.nodes.filter((n) => n.data.type === t);
+  };
+  const queryType = tree.nodes.filter((n) =>
+    n.type.operations?.includes(OperationType.query),
+  );
+  const mutationType = tree.nodes.filter((n) =>
+    n.type.operations?.includes(OperationType.mutation),
+  );
+  const subscriptionType = tree.nodes.filter((n) =>
+    n.type.operations?.includes(OperationType.subscription),
+  );
+  const schemaTypes = queryType.concat(mutationType).concat(subscriptionType);
+  const types = getNodesByType(TypeDefinition.ObjectTypeDefinition).filter(
+    (n) => !n.type.operations?.length,
+  );
+  const interfaces = getNodesByType(TypeDefinition.InterfaceTypeDefinition);
+  const unions = getNodesByType(TypeDefinition.UnionTypeDefinition);
+  const scalars = getNodesByType(TypeDefinition.ScalarTypeDefinition);
+  const enums = getNodesByType(TypeDefinition.EnumTypeDefinition);
+  const inputs = getNodesByType(TypeDefinition.InputObjectTypeDefinition);
+  const directives = getNodesByType(TypeSystemDefinition.DirectiveDefinition);
+  const mainType = queryType.length > 0 ? queryType[0] : types[0];
+  const typeRender = active
+    ? RenderType({
+        isStatic: true,
+        value: tree.nodes.find((n) => n.name === active)!,
+      })
+    : '';
+  return (
+    RenderSideBar({
+      schema: schemaTypes.map((st) => st.name),
+      activeType: mainType.name,
+      scalars: scalars.map((n) => n.name),
+      interfaces: interfaces.map((n) => n.name),
+      types: types.map((n) => n.name),
+      unions: unions.map((n) => n.name),
+      inputs: inputs.map((n) => n.name),
+      enums: enums.map((n) => n.name),
+      directives: directives.map((n) => n.name),
+    }) + typeRender
+  );
+};
+export const LiveDoc = ({ schema }: LiveDocProps) => {
+  const [currentType, setCurrentType] = useState<string>();
+
+  const tree = Parser.parse(schema);
+  const queryType = tree.nodes.find((n) =>
+    n.type.operations?.includes(OperationType.query),
+  );
+
   useEffect(() => {
     //@ts-ignore
     window.route = (typeName: string) => {
       setCurrentType(typeName);
     };
+    setCurrentType(queryType?.name || tree.nodes[0].name);
   }, []);
   return (
-    <GqlContainer
-      css={DetailView.css}
-      gql={DetailView.gql(currentType)}
-      url={url}
-      headers={{}}
-      dryad={DetailView.dryad(currentType)}
-    >
-      Loading...
-    </GqlContainer>
+    <>
+      <div
+        style={{ display: 'flex', background: Colors.main[10] }}
+        dangerouslySetInnerHTML={{
+          __html: LiveDocMain({ schema, active: currentType }),
+        }}
+      />
+      <style>
+        {queryType
+          ? CssReplace(DetailView.css, queryType.name)
+          : DetailView.css}
+      </style>
+    </>
   );
 };
-const returnTypeNames = async (url: string, headers = {}) => {
-  const parsedGql = `
-  {
-    __schema{
-      types{
-        name
-      }
-      queryType{
-          name
-      }
-      mutationType{
-          name
-      }
-      subscriptionType{
-          name
-      }
-    }
-  }
-  `;
-  const response = await (
-    await fetch(url, {
-      body: JSON.stringify({ query: parsedGql }),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers,
-      },
-    })
-  ).json();
-  const qualifiedPageTypes = response.data.__schema.types
-    .filter((t: any) => t.name.indexOf('__') === -1)
-    .map((t: any) => t.name);
-  return {
-    types: qualifiedPageTypes,
-    query: response.data.__schema.queryType,
-    mutation: response.data.__schema.mutationType,
-    subscription: response.data.__schema.subscriptionType,
-  };
-};
+
 export const LiveDocHtml = async ({
-  url,
+  schema,
   name = 'graphql-editor',
 }: LiveDocExportProps) => {
-  const allTypes = await returnTypeNames(url);
+  const tree = await Parser.parse(schema);
   const z = new zip();
   const types = z.folder('docs');
-  const mainType =
-    allTypes.query?.name ||
-    allTypes.mutation?.name ||
-    allTypes.subscription?.name ||
-    'Query';
-  for (const at of allTypes.types) {
-    const html = await RenderToHTML({
-      dryad: { render: DetailView.dryad(at)(mainType) },
-      gql: DetailView.gql(at),
-      url,
-      headers: {},
-    })!;
+  const queryType = tree.nodes.find((n) =>
+    n.type.operations?.includes(OperationType.query),
+  );
+  for (const at of tree.nodes) {
+    const html = LiveDocMain({ schema, active: at.name });
     const all = DocSkeletonStatic({
-      body: html!,
-      style: CssReplace(DetailView.css, mainType),
+      body: html,
+      style: queryType ? CssReplace(DetailView.css, queryType.name) : '',
     });
-    await types.file(`${at}.html`, all!);
+    await types?.file(`${at.name}.html`, all);
   }
   const zipFile = await z.generateAsync({ type: 'blob' });
   saveAs(zipFile, `${name}.zip`);

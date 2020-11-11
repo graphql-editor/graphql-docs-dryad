@@ -50,13 +50,9 @@ const typeLinks = (types, title, activeType) => {
 const LinksForKind = (kind) => (types, title, activeType) =>
   typeLinks(types, title, activeType);
 const MenuCategory = (kind) => (types, title, activeType) => {
-  const filteredTypes = types.filter((t) => t.kind === kind).map((t) => t.name);
-  if (filteredTypes.length === 0) {
-    return ``;
-  }
   return `
   <div class="MenuSection">
-    ${LinksForKind(kind)(filteredTypes, title, activeType)}
+    ${LinksForKind(kind)(types, title, activeType)}
   </div>
   `;
 };
@@ -186,20 +182,7 @@ const RenderFields = (fields) => `
 
 export const dryad = (type) => (queryType) => ({
   [queryType]: {
-    __schema: (v) => {
-      isStatic = v.isStatic;
-      if (!v.value) {
-        return ``;
-      }
-      const { queryType, mutationType, subscriptionType } = v.value;
-      const schemaTypes = [queryType, mutationType, subscriptionType]
-        .filter((t) => !!t)
-        .map((t) => t.name);
-      const types = v.value.types.filter((t) => !schemaTypes.includes(t.name));
-      types.sort((a, b) =>
-        a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1,
-      );
-      const mainTypes = types.filter((t) => t.name.indexOf('__') === -1);
+    __schema: ({}) => {
       return `
             <div class="Menu" id="Menu">
                 <div class="MenuHeader">
