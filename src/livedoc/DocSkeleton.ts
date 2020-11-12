@@ -1,3 +1,5 @@
+import { Colors } from '../Colors';
+
 export const DocSkeletonStatic = ({
   body,
   style,
@@ -15,6 +17,10 @@ export const DocSkeletonStatic = ({
         </style>
         <style>
             ${style}
+            body{
+              display: flex;
+              background: ${Colors.main[10]};
+            }
         </style>
         <script>
             window.scrollDocs = (name) => {
