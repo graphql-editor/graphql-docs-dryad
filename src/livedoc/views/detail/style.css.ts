@@ -305,7 +305,6 @@ export const css = `
     }
 
     .Field {
-        max-width: 40rem;
         width: 100%;
         padding: 1rem;
         background: var(--main85);

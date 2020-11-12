@@ -9,10 +9,13 @@ import { Remarkable } from 'remarkable';
 const md = new Remarkable();
 const renderLinking = (to: string, isStatic?: boolean) =>
   isStatic ? `href="${to}.html"` : `onclick="route('${to}')"`;
+
+const renderLinkingHome = (isStatic?: boolean) =>
+  isStatic ? `href="index.html"` : `onclick="route()"`;
 const typeLinks = (
   types: string[],
   title: string,
-  activeType: string,
+  active?: string,
   isStatic?: boolean,
 ) => {
   return `
@@ -22,7 +25,7 @@ const typeLinks = (
         .map(
           (t) =>
             `<a ${renderLinking(t, isStatic)} class="Link ${
-              t === activeType ? 'Active' : ''
+              t === active ? 'Active' : ''
             }" >${t}</a>`,
         )
         .join('')}
@@ -33,12 +36,12 @@ const typeLinks = (
 const MenuCategory = (
   types: string[],
   title: string,
-  activeType: string,
+  active?: string,
   isStatic?: boolean,
 ) => {
   return `
   <div class="MenuSection">
-    ${typeLinks(types, title, activeType, isStatic)}
+    ${typeLinks(types, title, active, isStatic)}
   </div>
   `;
 };
@@ -180,7 +183,7 @@ export const RenderSideBar = ({
   scalars,
   unions,
   schema,
-  activeType,
+  active,
   isStatic,
 }: {
   types: string[];
@@ -191,23 +194,24 @@ export const RenderSideBar = ({
   scalars: string[];
   directives: string[];
   schema: string[];
-  activeType: string;
+  active?: string;
   isStatic?: boolean;
 }) => {
   return `
             <div class="Menu" id="Menu">
-                <div class="MenuHeader">
+                <a class="MenuHeader" ${renderLinkingHome(isStatic)}>
                     <img class="Logo" src="https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png" />
-                </div>
+                </a>
                 <div class="MenuSection">
-                    ${typeLinks(schema, 'Schema', activeType, isStatic)}
+                    ${typeLinks(schema, 'Schema', active, isStatic)}
                 </div>
-                ${MenuCategory(types, 'Types', activeType, isStatic)}
-                ${MenuCategory(interfaces, 'Interfaces', activeType, isStatic)}
-                ${MenuCategory(unions, 'Unions', activeType, isStatic)}
-                ${MenuCategory(inputs, 'Inputs', activeType, isStatic)}
-                ${MenuCategory(enums, 'Enums', activeType, isStatic)}
-                ${MenuCategory(scalars, 'Scalars', activeType, isStatic)}
+                ${MenuCategory(types, 'Types', active, isStatic)}
+                ${MenuCategory(interfaces, 'Interfaces', active, isStatic)}
+                ${MenuCategory(unions, 'Unions', active, isStatic)}
+                ${MenuCategory(inputs, 'Inputs', active, isStatic)}
+                ${MenuCategory(enums, 'Enums', active, isStatic)}
+                ${MenuCategory(scalars, 'Scalars', active, isStatic)}
+                ${MenuCategory(directives, 'Directives', active, isStatic)}
             </div>
             <burger-menu id="BurgerMenu" onClick="toggleMenu()">
               <burger-bar></burger-bar>

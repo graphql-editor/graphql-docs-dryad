@@ -16,13 +16,14 @@ import { Colors } from '../Colors';
 export interface LiveDocProps {
   schema: string;
   active?: string;
+  isStatic?: boolean;
 }
 export interface LiveDocExportProps {
   schema: string;
   name?: string;
 }
 
-export const LiveDocMain = ({ schema, active }: LiveDocProps) => {
+export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   const tree = Parser.parse(schema);
   const getNodesByType = (t: AllTypes) => {
     return tree.nodes.filter((n) => n.data.type === t);
@@ -46,7 +47,6 @@ export const LiveDocMain = ({ schema, active }: LiveDocProps) => {
   const enums = getNodesByType(TypeDefinition.EnumTypeDefinition);
   const inputs = getNodesByType(TypeDefinition.InputObjectTypeDefinition);
   const directives = getNodesByType(TypeSystemDefinition.DirectiveDefinition);
-  const mainType = queryType.length > 0 ? queryType[0] : types[0];
   const typeRender = active
     ? RenderType({
         isStatic: true,
@@ -55,8 +55,8 @@ export const LiveDocMain = ({ schema, active }: LiveDocProps) => {
     : '';
   return (
     RenderSideBar({
+      active,
       schema: schemaTypes.map((st) => st.name),
-      activeType: mainType.name,
       scalars: scalars.map((n) => n.name),
       interfaces: interfaces.map((n) => n.name),
       types: types.map((n) => n.name),
@@ -80,12 +80,15 @@ export const LiveDoc = ({ schema }: LiveDocProps) => {
     window.route = (typeName: string) => {
       setCurrentType(typeName);
     };
-    setCurrentType(queryType?.name || tree.nodes[0].name);
   }, []);
   return (
     <>
       <div
-        style={{ display: 'flex', background: Colors.main[10] }}
+        style={{
+          display: 'flex',
+          background: Colors.main[10],
+          maxHeight: '100%',
+        }}
         dangerouslySetInnerHTML={{
           __html: LiveDocMain({ schema, active: currentType }),
         }}
@@ -110,7 +113,7 @@ export const LiveDocHtml = async ({
     n.type.operations?.includes(OperationType.query),
   );
   for (const at of tree.nodes) {
-    const html = LiveDocMain({ schema, active: at.name });
+    const html = LiveDocMain({ schema, active: at.name, isStatic: true });
     const all = DocSkeletonStatic({
       body: html,
       style: queryType ? CssReplace(DetailView.css, queryType.name) : '',
