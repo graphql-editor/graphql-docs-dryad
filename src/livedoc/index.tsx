@@ -49,7 +49,7 @@ export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   const directives = getNodesByType(TypeSystemDefinition.DirectiveDefinition);
   const typeRender = active
     ? RenderType({
-        isStatic: true,
+        isStatic,
         value: tree.nodes.find((n) => n.name === active)!,
       })
     : '';
@@ -64,6 +64,7 @@ export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
       inputs: inputs.map((n) => n.name),
       enums: enums.map((n) => n.name),
       directives: directives.map((n) => n.name),
+      isStatic,
     }) + typeRender
   );
 };
