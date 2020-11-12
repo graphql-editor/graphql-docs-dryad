@@ -12,15 +12,14 @@ export const DocSkeletonStatic = ({
         <style>
             body{
               margin: 0;
-              height:100%
+              height:100%;
+              display: flex;
+              background: ${Colors.main[10]};
+              font-family: 'Roboto';
             }
         </style>
         <style>
             ${style}
-            body{
-              display: flex;
-              background: ${Colors.main[10]};
-            }
         </style>
         <script>
             window.scrollDocs = (name) => {
