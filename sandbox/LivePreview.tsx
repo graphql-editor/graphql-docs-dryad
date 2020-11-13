@@ -6,7 +6,7 @@ export const Main = () => {
   const [schema, setSchema] = useState<string>();
   useEffect(() => {
     Utils.getFromUrl(
-      'https://faker.graphqleditor.com/a-team/foodeli-tenant/graphql',
+      'https://faker.graphqleditor.com/explore-projects/feature-mole/graphql',
     ).then((result) => setSchema(result));
   }, []);
   return schema ? <LiveDoc schema={schema} /> : <></>;

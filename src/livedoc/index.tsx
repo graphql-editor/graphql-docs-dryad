@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import DetailView from './views/detail';
 import zip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -29,6 +29,8 @@ export interface LiveDocExportProps {
   schema: string;
   name?: string;
 }
+
+let currentScroll: number;
 
 export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   const tree = Parser.parse(schema);
@@ -93,13 +95,46 @@ export const LiveDoc = ({ schema }: LiveDocProps) => {
   useEffect(() => {
     //@ts-ignore
     window.route = (typeName: string) => {
-      const currentScroll = document.getElementById('Menu')?.scrollTop || 0;
+      const menuElement = document.getElementById('Menu');
+      if (!menuElement?.parentElement) {
+        throw new Error('No Menu element');
+      }
+      const element = document.getElementById(`Docs-${typeName}`);
+      const rect = element?.getBoundingClientRect();
+      if (
+        rect &&
+        rect.y > 0 &&
+        rect.y < menuElement.parentElement.clientHeight
+      ) {
+        //keep scroll
+        currentScroll = menuElement.scrollTop;
+      } else {
+        currentScroll = -1;
+      }
       setCurrentType(typeName);
-      document.getElementById('Menu')?.scrollTo({
-        top: currentScroll,
-      });
     };
   }, []);
+  useLayoutEffect(() => {
+    const menuElement = document.getElementById('Menu');
+    if (currentScroll !== -1) {
+      menuElement?.scrollTo({ top: currentScroll });
+    }
+    if (!menuElement?.parentElement) {
+      throw new Error('No Menu element');
+    }
+    // const currentScroll = menuElement.scrollTop;
+    // const { height } = menuElement.parentElement!.getBoundingClientRect();
+    const element = document.getElementById(`Docs-${currentType}`);
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      if (rect.y > menuElement.parentElement.clientHeight) {
+        menuElement.scrollTo({
+          behavior: 'auto',
+          top: rect.y,
+        });
+      }
+    }
+  }, [currentType]);
   return (
     <>
       <div
@@ -128,24 +163,29 @@ export const LiveDocHtml = async ({
   const tree = await Parser.parse(schema);
   const z = new zip();
   const types = z.folder('docs');
+  if (!types) {
+    throw new Error('Cannot init jszip');
+  }
   const queryType = tree.nodes.find((n) =>
     n.type.operations?.includes(OperationType.query),
   );
-  await types?.file(
+  const css = queryType
+    ? CssReplace(DetailView.css, queryType.name)
+    : DetailView.css;
+  await types.file(
     `index.html`,
     DocSkeletonStatic({
       body: LiveDocMain({ schema, isStatic: true }),
-      style: queryType ? CssReplace(DetailView.css, queryType.name) : '',
     }),
   );
   for (const at of tree.nodes) {
     const html = LiveDocMain({ schema, active: at.name, isStatic: true });
     const all = DocSkeletonStatic({
       body: html,
-      style: queryType ? CssReplace(DetailView.css, queryType.name) : '',
     });
-    await types?.file(`${at.name}.html`, all);
+    await types.file(`${at.name}.html`, all);
   }
+  await types.file(`styles.css`, css);
   const zipFile = await z.generateAsync({ type: 'blob' });
   saveAs(zipFile, `${name}.zip`);
 };

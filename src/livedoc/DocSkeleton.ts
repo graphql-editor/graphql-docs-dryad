@@ -1,12 +1,6 @@
 import { Colors } from '../Colors';
 
-export const DocSkeletonStatic = ({
-  body,
-  style,
-}: {
-  body: string;
-  style: string;
-}) => `
+export const DocSkeletonStatic = ({ body }: { body: string }) => `
   <html>
       <head>
         <style>
@@ -18,9 +12,7 @@ export const DocSkeletonStatic = ({
               font-family: 'Roboto';
             }
         </style>
-        <style>
-            ${style}
-        </style>
+        <link rel="stylesheet" href="styles.css" />
         <script>
             window.scrollDocs = (name) => {
                 const element = document.getElementById(name);

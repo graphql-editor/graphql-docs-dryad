@@ -363,6 +363,10 @@ export const css = `
         color: var(--grey3);
         font-weight: var(--light);
     }
+    
+    strong{
+        font-weight: bold;
+    }
 
     .TableOfContents {
         display: flex;
