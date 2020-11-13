@@ -13,6 +13,13 @@ import {
 } from 'graphql-zeus';
 import { RenderSideBar, RenderType } from './views/detail/html';
 import { Colors } from '../Colors';
+import {
+  BooleanNode,
+  FloatNode,
+  IDNode,
+  IntNode,
+  StringNode,
+} from '../builtInNodes';
 export interface LiveDocProps {
   schema: string;
   active?: string;
@@ -25,16 +32,23 @@ export interface LiveDocExportProps {
 
 export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   const tree = Parser.parse(schema);
+  const nodes = tree.nodes.concat([
+    BooleanNode,
+    FloatNode,
+    IDNode,
+    IntNode,
+    StringNode,
+  ]);
   const getNodesByType = (t: AllTypes) => {
-    return tree.nodes.filter((n) => n.data.type === t);
+    return nodes.filter((n) => n.data.type === t);
   };
-  const queryType = tree.nodes.filter((n) =>
+  const queryType = nodes.filter((n) =>
     n.type.operations?.includes(OperationType.query),
   );
-  const mutationType = tree.nodes.filter((n) =>
+  const mutationType = nodes.filter((n) =>
     n.type.operations?.includes(OperationType.mutation),
   );
-  const subscriptionType = tree.nodes.filter((n) =>
+  const subscriptionType = nodes.filter((n) =>
     n.type.operations?.includes(OperationType.subscription),
   );
   const schemaTypes = queryType.concat(mutationType).concat(subscriptionType);
@@ -50,7 +64,7 @@ export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   const typeRender = active
     ? RenderType({
         isStatic,
-        value: tree.nodes.find((n) => n.name === active)!,
+        value: nodes.find((n) => n.name === active)!,
       })
     : '';
   return (
@@ -79,7 +93,11 @@ export const LiveDoc = ({ schema }: LiveDocProps) => {
   useEffect(() => {
     //@ts-ignore
     window.route = (typeName: string) => {
+      const currentScroll = document.getElementById('Menu')?.scrollTop || 0;
       setCurrentType(typeName);
+      document.getElementById('Menu')?.scrollTo({
+        top: currentScroll,
+      });
     };
   }, []);
   return (
@@ -88,7 +106,7 @@ export const LiveDoc = ({ schema }: LiveDocProps) => {
         style={{
           display: 'flex',
           background: Colors.main[10],
-          maxHeight: '100%',
+          height: '100%',
         }}
         dangerouslySetInnerHTML={{
           __html: LiveDocMain({ schema, active: currentType }),
@@ -112,6 +130,13 @@ export const LiveDocHtml = async ({
   const types = z.folder('docs');
   const queryType = tree.nodes.find((n) =>
     n.type.operations?.includes(OperationType.query),
+  );
+  await types?.file(
+    `index.html`,
+    DocSkeletonStatic({
+      body: LiveDocMain({ schema, isStatic: true }),
+      style: queryType ? CssReplace(DetailView.css, queryType.name) : '',
+    }),
   );
   for (const at of tree.nodes) {
     const html = LiveDocMain({ schema, active: at.name, isStatic: true });

@@ -20,11 +20,11 @@ const typeLinks = (
 ) => {
   return `
   <div class="MenuTypes">
-      <h4>${title}</h4>
+      <h4 class="Docs-h4">${title}</h4>
       ${types
         .map(
           (t) =>
-            `<a ${renderLinking(t, isStatic)} class="Link ${
+            `<a id="Docs-${t}" ${renderLinking(t, isStatic)} class="Link ${
               t === active ? 'Active' : ''
             }" >${t}</a>`,
         )
@@ -120,7 +120,7 @@ const RenderField = (field: ParserField) => {
 
 const RenderPossibleTypes = (types: ParserField[]) => `
 <div class="__Type-possibleTypes">
-    <h3>Possible Types</h3>
+    <h3 class="Docs-h3">Possible Types</h3>
     <div class="Fields">
         ${types
           .map((field: { name: any }) => {
@@ -137,7 +137,7 @@ const RenderPossibleTypes = (types: ParserField[]) => `
 
 const RenderEnums = (enums: ParserField[]) => `
     <div class="__Type-fields">
-        <h3>Enum Values</h3>
+        <h3 class="Docs-h3">Enum Values</h3>
         <div class="Fields">
           ${enums
             .map((field) => {
@@ -159,7 +159,7 @@ const RenderEnums = (enums: ParserField[]) => `
 
 const RenderFields = (fields: ParserField[]) => `
     <div class="__Type-fields">
-        <h3>Table of Contents</h3>
+        <h3 class="Docs-h3">Table of Contents</h3>
         <div class="TableOfContents">
         ${fields
           .map((field) => {
@@ -167,7 +167,7 @@ const RenderFields = (fields: ParserField[]) => `
           })
           .join('')}
         </div>
-        <h3>Fields</h3>
+        <h3 class="Docs-h3">Fields</h3>
         <div class="Fields">
             ${fields.map(RenderField).join('')}
         </div>

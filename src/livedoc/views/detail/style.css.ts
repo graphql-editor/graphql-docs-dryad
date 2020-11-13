@@ -92,38 +92,37 @@ export const css = `
         max-width: 100%;
     }
 
-    p,
-    h1,
-    ,
-    h2,
-    h3,
-    h4,
-    h5 {
+    .Docs-p,
+    .Docs-h1,
+    .Docs-h2,
+    .Docs-h3,
+    .Docs-h4,
+    .Docs-h5 {
         margin: 0;
     }
 
-    p {
+    .Docs-p {
         color: var(--grey3);
         font-weight: var(--light);
     }
 
-    p+h2 {
+    .Docs-p+.Docs-h2 {
         margin-top: 2.875rem;
     }
 
-    h1 {
+    .Docs-h1 {
         font-size: 1.75rem;
         font-weight: var(--bold);
         line-height: 1.16;
         color: var(--grey3);
     }
 
-    h2 {
+    .Docs-h2 {
         font-size: 1.5rem;
         margin: 0 0 1rem 0;
     }
 
-    h3 {
+    .Docs-h3 {
         color: var(--grey3);
         font-size: 1.25rem;
         font-weight: var(--bold);
@@ -131,15 +130,15 @@ export const css = `
         margin: 0 0 1.125rem 0;
     }
 
-    h4 {
+    .Docs-h4 {
         font-size: 0.75rem;
         margin: 0 0 0.5rem 0;
         color: var(--grey6);
         text-transform: uppercase;
     }
 
-    h5 {
-        font-size 0.75rem;
+    .Docs-h5 {
+        font-size: 0.75rem;
     }
 
     .Query {
@@ -467,10 +466,10 @@ export const css = `
     }
 
     @media (min-width: 1050px) {
-        h1 {
+       .Docs-h1 {
             font-size: 1.875rem;
         }
-        h3 {
+        .Docs-h3 {
             font-size: 1.375rem;
         }
         .Menu .MenuHeader {
