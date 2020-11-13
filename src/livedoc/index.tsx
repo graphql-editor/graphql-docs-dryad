@@ -32,15 +32,11 @@ export interface LiveDocExportProps {
 
 let currentScroll: number;
 
+const builtInScalars = [BooleanNode, FloatNode, IDNode, IntNode, StringNode];
+
 export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   const tree = Parser.parse(schema);
-  const nodes = tree.nodes.concat([
-    BooleanNode,
-    FloatNode,
-    IDNode,
-    IntNode,
-    StringNode,
-  ]);
+  const nodes = tree.nodes.concat(builtInScalars);
   const getNodesByType = (t: AllTypes) => {
     return nodes.filter((n) => n.data.type === t);
   };
@@ -178,10 +174,11 @@ export const LiveDocHtml = async ({
       body: LiveDocMain({ schema, isStatic: true }),
     }),
   );
-  for (const at of tree.nodes) {
+  for (const at of tree.nodes.concat(builtInScalars)) {
     const html = LiveDocMain({ schema, active: at.name, isStatic: true });
     const all = DocSkeletonStatic({
       body: html,
+      startingType: at.name,
     });
     await types.file(`${at.name}.html`, all);
   }

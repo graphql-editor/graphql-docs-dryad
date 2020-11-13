@@ -1,6 +1,12 @@
 import { Colors } from '../Colors';
 
-export const DocSkeletonStatic = ({ body }: { body: string }) => `
+export const DocSkeletonStatic = ({
+  body,
+  startingType,
+}: {
+  body: string;
+  startingType?: string;
+}) => `
   <html>
       <head>
         <style>
@@ -30,6 +36,11 @@ export const DocSkeletonStatic = ({ body }: { body: string }) => `
                 menuElement.classList.add('ShowToggle');
               }
             };
+            ${
+              startingType
+                ? `window.location.href = window.location.href + "#Docs-" + "${startingType}";`
+                : ''
+            }
         </script>  
       </head>
       <body>
