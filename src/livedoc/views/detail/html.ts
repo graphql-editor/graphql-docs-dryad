@@ -90,12 +90,17 @@ const RenderFieldTOC = (field: ParserField) => {
   `;
 };
 
-const RenderField = (field: ParserField) => {
+const RenderField = (field: ParserField, isStatic?: boolean) => {
   const argsRender =
     field.args && field.args.length > 0
       ? `(${field.args
           .map((a) => {
-            return `<span class="ArgumentName">${a.name}:</span><span class="FieldType">${a.type.name}</span>`;
+            return `<span class="ArgumentName">${
+              a.name
+            }:</span><a ${renderLinking(
+              a.type.name,
+              isStatic,
+            )}  class="FieldType" >${a.type.name}</span>`;
           })
           .join(', ')})`
       : '';
@@ -105,7 +110,7 @@ const RenderField = (field: ParserField) => {
           <div id="${field.name}" class="FieldName FieldName--field">${
     field.name
   }${argsRender}</div>
-          <a ${renderLinking(field.type.name)} class="FieldType">${
+          <a ${renderLinking(field.type.name, isStatic)} class="FieldType">${
     field.type.name
   }</a>
       </div>
@@ -118,7 +123,7 @@ const RenderField = (field: ParserField) => {
   `;
 };
 
-const RenderPossibleTypes = (types: ParserField[]) => `
+const RenderPossibleTypes = (types: ParserField[], isStatic?: boolean) => `
 <div class="__Type-possibleTypes">
     <h3 class="Docs-h3">Possible Types</h3>
     <div class="Fields">
@@ -127,6 +132,7 @@ const RenderPossibleTypes = (types: ParserField[]) => `
             return `
             <a ${renderLinking(
               field.name,
+              isStatic,
             )} class="FieldName FieldName--unionType">${field.name}</a>
             `;
           })
@@ -157,7 +163,7 @@ const RenderEnums = (enums: ParserField[]) => `
             .join('')}
         </div>`;
 
-const RenderFields = (fields: ParserField[]) => `
+const RenderFields = (fields: ParserField[], isStatic?: boolean) => `
     <div class="__Type-fields">
         <h3 class="Docs-h3">Table of Contents</h3>
         <div class="TableOfContents">
@@ -169,7 +175,7 @@ const RenderFields = (fields: ParserField[]) => `
         </div>
         <h3 class="Docs-h3">Fields</h3>
         <div class="Fields">
-            ${fields.map(RenderField).join('')}
+            ${fields.map((f) => RenderField(f, isStatic)).join('')}
         </div>
     </div>
 `;
@@ -248,10 +254,14 @@ export const RenderType = ({
             <div class="__Type-description">${
               !!description?.length ? md.render(description) : ''
             }</div>
-            ${!!fields?.length ? RenderFields(fields) : ''} 
-            ${!!inputFields?.length ? RenderFields(inputFields) : ''} 
+            ${!!fields?.length ? RenderFields(fields, isStatic) : ''} 
+            ${!!inputFields?.length ? RenderFields(inputFields, isStatic) : ''} 
             ${!!enumValues?.length ? RenderEnums(enumValues) : ''} 
-            ${!!unionTypes?.length ? RenderPossibleTypes(unionTypes) : ''} 
+            ${
+              !!unionTypes?.length
+                ? RenderPossibleTypes(unionTypes, isStatic)
+                : ''
+            } 
           </div>
         </div>
       `;
