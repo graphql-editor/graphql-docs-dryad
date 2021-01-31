@@ -1,6 +1,6 @@
 {
   "name": "graphql-dryad-docs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Dryad livedoc",
   "main": "lib/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/graphql-editor/graphql-dryad#readme",
   "dependencies": {
     "file-saver": "^2.0.2",
-    "graphql-zeus": "^2.8.5",
+    "graphql-zeus": "^3.0.0-18",
     "jszip": "^3.3.0",
     "remarkable": "^2.0.0"
   },

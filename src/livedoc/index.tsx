@@ -22,11 +22,13 @@ import {
 } from '../builtInNodes';
 export interface LiveDocProps {
   schema: string;
+  css?: string;
   active?: string;
   isStatic?: boolean;
 }
 export interface LiveDocExportProps {
   schema: string;
+  css?: string;
   name?: string;
 }
 
@@ -77,10 +79,12 @@ export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
       enums: enums.map((n) => n.name),
       directives: directives.map((n) => n.name),
       isStatic,
+      logo:
+        'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
     }) + typeRender
   );
 };
-export const LiveDoc = ({ schema }: LiveDocProps) => {
+export const LiveDoc = ({ schema, css = DetailView.css }: LiveDocProps) => {
   const [currentType, setCurrentType] = useState<string>();
 
   const tree = Parser.parse(schema);
@@ -143,17 +147,14 @@ export const LiveDoc = ({ schema }: LiveDocProps) => {
           __html: LiveDocMain({ schema, active: currentType }),
         }}
       />
-      <style>
-        {queryType
-          ? CssReplace(DetailView.css, queryType.name)
-          : DetailView.css}
-      </style>
+      <style>{queryType ? CssReplace(css, queryType.name) : css}</style>
     </>
   );
 };
 
 export const LiveDocHtml = async ({
   schema,
+  css = DetailView.css,
   name = 'graphql-editor',
 }: LiveDocExportProps) => {
   const tree = await Parser.parse(schema);
@@ -165,9 +166,7 @@ export const LiveDocHtml = async ({
   const queryType = tree.nodes.find((n) =>
     n.type.operations?.includes(OperationType.query),
   );
-  const css = queryType
-    ? CssReplace(DetailView.css, queryType.name)
-    : DetailView.css;
+  const cssResult = queryType ? CssReplace(css, queryType.name) : css;
   await types.file(
     `index.html`,
     DocSkeletonStatic({
@@ -182,7 +181,7 @@ export const LiveDocHtml = async ({
     });
     await types.file(`${at.name}.html`, all);
   }
-  await types.file(`styles.css`, css);
+  await types.file(`styles.css`, cssResult);
   const zipFile = await z.generateAsync({ type: 'blob' });
   saveAs(zipFile, `${name}.zip`);
 };

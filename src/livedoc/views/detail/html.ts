@@ -191,6 +191,7 @@ export const RenderSideBar = ({
   schema,
   active,
   isStatic,
+  logo,
 }: {
   types: string[];
   interfaces: string[];
@@ -202,11 +203,12 @@ export const RenderSideBar = ({
   schema: string[];
   active?: string;
   isStatic?: boolean;
+  logo?: string;
 }) => {
   return `
             <div class="Menu" id="Menu">
                 <a class="MenuHeader" ${renderLinkingHome(isStatic)}>
-                    <img class="Logo" src="https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png" />
+                    ${logo ? `<img class="Logo" src="${logo}" />` : `Docs`}
                 </a>
                 <div class="MenuSection">
                     ${typeLinks(schema, 'Schema', active, isStatic)}
