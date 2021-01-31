@@ -96,6 +96,7 @@ export const css = `
         flex:1;
         height:100%;
         display:flex;
+        font-family:'Roboto';
     }
     .Docs-p,
     .Docs-h1,
