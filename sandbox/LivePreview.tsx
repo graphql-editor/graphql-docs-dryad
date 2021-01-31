@@ -9,5 +9,5 @@ export const Main = () => {
       'https://faker.graphqleditor.com/explore-projects/feature-mole/graphql',
     ).then((result) => setSchema(result));
   }, []);
-  return schema ? <LiveDoc schema={schema} /> : <></>;
+  return schema ? <LiveDoc logo="" schema={schema} /> : <></>;
 };

@@ -91,7 +91,12 @@ export const css = `
         display: block;
         max-width: 100%;
     }
-
+    .EditorDocumentationContainer{
+        background: var(--main95);
+        flex:1;
+        height:100%;
+        display:flex;
+    }
     .Docs-p,
     .Docs-h1,
     .Docs-h2,
@@ -170,6 +175,10 @@ export const css = `
         transform: translateX(-100%);
         transition: transform 350ms ease-in-out 0s;
         z-index: 1;
+    }
+
+    .MenuHeader{
+        color: var(--grey0);
     }
 
     .Menu.ShowToggle {

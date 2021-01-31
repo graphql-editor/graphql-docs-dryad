@@ -1,5 +1,3 @@
-import { Colors } from '../Colors';
-
 export const DocSkeletonStatic = ({
   body,
   startingType,
@@ -12,10 +10,6 @@ export const DocSkeletonStatic = ({
         <style>
             body{
               margin: 0;
-              height:100%;
-              display: flex;
-              background: ${Colors.main[10]};
-              font-family: 'Roboto';
             }
         </style>
         <link rel="stylesheet" href="styles.css" />

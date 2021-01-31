@@ -12,7 +12,6 @@ import {
   TypeSystemDefinition,
 } from 'graphql-zeus';
 import { RenderSideBar, RenderType } from './views/detail/html';
-import { Colors } from '../Colors';
 import {
   BooleanNode,
   FloatNode,
@@ -25,18 +24,25 @@ export interface LiveDocProps {
   css?: string;
   active?: string;
   isStatic?: boolean;
+  logo?: string;
 }
 export interface LiveDocExportProps {
   schema: string;
   css?: string;
   name?: string;
+  logo?: string;
 }
 
 let currentScroll: number;
 
 const builtInScalars = [BooleanNode, FloatNode, IDNode, IntNode, StringNode];
 
-export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
+export const LiveDocMain = ({
+  schema,
+  active,
+  isStatic,
+  logo,
+}: LiveDocProps) => {
   const tree = Parser.parse(schema);
   const nodes = tree.nodes.concat(builtInScalars);
   const getNodesByType = (t: AllTypes) => {
@@ -67,24 +73,25 @@ export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
         value: nodes.find((n) => n.name === active)!,
       })
     : '';
-  return (
-    RenderSideBar({
-      active,
-      schema: schemaTypes.map((st) => st.name),
-      scalars: scalars.map((n) => n.name),
-      interfaces: interfaces.map((n) => n.name),
-      types: types.map((n) => n.name),
-      unions: unions.map((n) => n.name),
-      inputs: inputs.map((n) => n.name),
-      enums: enums.map((n) => n.name),
-      directives: directives.map((n) => n.name),
-      isStatic,
-      logo:
-        'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
-    }) + typeRender
-  );
+  return `<div class="EditorDocumentationContainer">${RenderSideBar({
+    active,
+    schema: schemaTypes.map((st) => st.name),
+    scalars: scalars.map((n) => n.name),
+    interfaces: interfaces.map((n) => n.name),
+    types: types.map((n) => n.name),
+    unions: unions.map((n) => n.name),
+    inputs: inputs.map((n) => n.name),
+    enums: enums.map((n) => n.name),
+    directives: directives.map((n) => n.name),
+    isStatic,
+    logo,
+  }) + typeRender}</div>`;
 };
-export const LiveDoc = ({ schema, css = DetailView.css }: LiveDocProps) => {
+export const LiveDoc = ({
+  schema,
+  css = DetailView.css,
+  logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
+}: LiveDocProps) => {
   const [currentType, setCurrentType] = useState<string>();
 
   const tree = Parser.parse(schema);
@@ -139,12 +146,10 @@ export const LiveDoc = ({ schema, css = DetailView.css }: LiveDocProps) => {
     <>
       <div
         style={{
-          display: 'flex',
-          background: Colors.main[10],
           height: '100%',
         }}
         dangerouslySetInnerHTML={{
-          __html: LiveDocMain({ schema, active: currentType }),
+          __html: LiveDocMain({ schema, logo, active: currentType }),
         }}
       />
       <style>{queryType ? CssReplace(css, queryType.name) : css}</style>
@@ -156,6 +161,7 @@ export const LiveDocHtml = async ({
   schema,
   css = DetailView.css,
   name = 'graphql-editor',
+  logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
 }: LiveDocExportProps) => {
   const tree = await Parser.parse(schema);
   const z = new zip();
@@ -174,7 +180,7 @@ export const LiveDocHtml = async ({
     }),
   );
   for (const at of tree.nodes.concat(builtInScalars)) {
-    const html = LiveDocMain({ schema, active: at.name, isStatic: true });
+    const html = LiveDocMain({ schema, active: at.name, logo, isStatic: true });
     const all = DocSkeletonStatic({
       body: html,
       startingType: at.name,
