@@ -1,4 +1,4 @@
-// import { ReturnTypes, PartialObjects } from './generated/graphql-zeus';
+// import { ReturnTypes, PartialObjects } from './generated/graphql-js-tree';
 
 // export const ReturnTypesRecord = ReturnTypes as Record<string, Record<string, string>>;
 

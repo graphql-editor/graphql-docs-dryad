@@ -1,13 +1,12 @@
-import { Utils } from 'graphql-zeus';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { featureMoleSchema } from '../sandbox/schemas/feature-mole';
 import { LiveDoc } from '../src/livedoc';
 
 export const Main = () => {
-  const [schema, setSchema] = useState<string>();
-  useEffect(() => {
-    Utils.getFromUrl(
-      'https://faker.graphqleditor.com/explore-projects/feature-mole/graphql',
-    ).then((result) => setSchema(result));
-  }, []);
-  return schema ? <LiveDoc logo="" schema={schema} /> : <></>;
+  return (
+    <LiveDoc
+      logo=""
+      schema={featureMoleSchema.library + featureMoleSchema.schema}
+    />
+  );
 };

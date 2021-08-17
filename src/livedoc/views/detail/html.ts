@@ -2,7 +2,7 @@ import {
   ParserField,
   TypeSystemDefinition,
   ValueDefinition,
-} from 'graphql-zeus';
+} from 'graphql-js-tree';
 // @ts-ignore
 import { Remarkable } from 'remarkable';
 // @ts-ignore

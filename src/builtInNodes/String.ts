@@ -1,4 +1,4 @@
-import { ParserField, TypeDefinition } from 'graphql-zeus';
+import { ParserField, TypeDefinition } from 'graphql-js-tree';
 
 export const StringNode: ParserField = {
   name: 'String',

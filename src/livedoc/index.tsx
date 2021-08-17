@@ -10,7 +10,7 @@ import {
   Parser,
   TypeDefinition,
   TypeSystemDefinition,
-} from 'graphql-zeus';
+} from 'graphql-js-tree';
 import { RenderSideBar, RenderType } from './views/detail/html';
 import {
   BooleanNode,
@@ -19,18 +19,21 @@ import {
   IntNode,
   StringNode,
 } from '../builtInNodes';
+import { DarkTheme, EditorTheme } from '../theming/DarkTheme';
 export interface LiveDocProps {
   schema: string;
-  css?: string;
+  css?: typeof DetailView.css;
   active?: string;
   isStatic?: boolean;
   logo?: string;
+  theme?: EditorTheme;
 }
 export interface LiveDocExportProps {
   schema: string;
-  css?: string;
+  css?: typeof DetailView.css;
   name?: string;
   logo?: string;
+  theme?: EditorTheme;
 }
 
 let currentScroll: number;
@@ -89,7 +92,8 @@ export const LiveDocMain = ({
 };
 export const LiveDoc = ({
   schema,
-  css = DetailView.css,
+  css: originalCss = DetailView.css,
+  theme = DarkTheme,
   logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
 }: LiveDocProps) => {
   const [currentType, setCurrentType] = useState<string>();
@@ -98,6 +102,7 @@ export const LiveDoc = ({
   const queryType = tree.nodes.find((n) =>
     n.type.operations?.includes(OperationType.query),
   );
+  const css = originalCss(theme);
 
   useEffect(() => {
     //@ts-ignore
@@ -159,13 +164,15 @@ export const LiveDoc = ({
 
 export const LiveDocHtml = async ({
   schema,
-  css = DetailView.css,
+  css: originalCss = DetailView.css,
   name = 'graphql-editor',
+  theme = DarkTheme,
   logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
 }: LiveDocExportProps) => {
   const tree = await Parser.parse(schema);
   const z = new zip();
   const types = z.folder('docs');
+  const css = originalCss(theme);
   if (!types) {
     throw new Error('Cannot init jszip');
   }
