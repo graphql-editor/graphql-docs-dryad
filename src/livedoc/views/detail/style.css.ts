@@ -10,23 +10,15 @@ const css = (strings: TemplateStringsArray, ...expr: string[]) => {
 
 export const cssStyle = themed(
   ({
-    colors: {
-      text,
-      hover,
-      dimmed,
-      inactive,
-      disabled,
-      success,
-      main,
-      info,
-      background: {
-        mainCloser,
-        mainMiddle,
-        mainFar,
-        mainFurther,
-        mainFurthest,
-      },
-    },
+    text,
+    hover,
+    dimmed,
+    inactive,
+    disabled,
+    success,
+    main,
+    info,
+    background: { mainCloser, mainMiddle, mainFar, mainFurther, mainFurthest },
   }) => {
     return css`
       html {
