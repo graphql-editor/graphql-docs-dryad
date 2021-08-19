@@ -22,7 +22,7 @@ import {
 import { DarkTheme, EditorTheme } from '../theming/DarkTheme';
 export interface LiveDocProps {
   schema: string;
-  css?: typeof DetailView.css;
+  css?: string;
   active?: string;
   isStatic?: boolean;
   logo?: string;
@@ -30,7 +30,7 @@ export interface LiveDocProps {
 }
 export interface LiveDocExportProps {
   schema: string;
-  css?: typeof DetailView.css;
+  css?: string;
   name?: string;
   logo?: string;
   theme?: EditorTheme;
@@ -92,7 +92,7 @@ export const LiveDocMain = ({
 };
 export const LiveDoc = ({
   schema,
-  css: originalCss = DetailView.css,
+  css: originalCss,
   theme = DarkTheme,
   logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
 }: LiveDocProps) => {
@@ -102,7 +102,7 @@ export const LiveDoc = ({
   const queryType = tree.nodes.find((n) =>
     n.type.operations?.includes(OperationType.query),
   );
-  const css = originalCss(theme);
+  const css = originalCss || DetailView.css(theme);
 
   useEffect(() => {
     //@ts-ignore
@@ -164,7 +164,7 @@ export const LiveDoc = ({
 
 export const LiveDocHtml = async ({
   schema,
-  css: originalCss = DetailView.css,
+  css: originalCss,
   name = 'graphql-editor',
   theme = DarkTheme,
   logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
@@ -172,7 +172,7 @@ export const LiveDocHtml = async ({
   const tree = await Parser.parse(schema);
   const z = new zip();
   const types = z.folder('docs');
-  const css = originalCss(theme);
+  const css = originalCss || DetailView.css(theme);
   if (!types) {
     throw new Error('Cannot init jszip');
   }
