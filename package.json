@@ -1,6 +1,6 @@
 {
   "name": "graphql-dryad-docs",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Dryad livedoc",
   "main": "lib/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "dependencies": {
     "color2k": "^1.2.4",
     "file-saver": "^2.0.2",
-    "graphql-js-tree": "0.0.1",
+    "graphql-js-tree": "0.0.2",
     "jszip": "^3.3.0",
     "remarkable": "^2.0.0"
   },

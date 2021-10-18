@@ -18,7 +18,14 @@ export const cssStyle = themed(
     success,
     main,
     info,
-    background: { mainCloser, mainMiddle, mainFar, mainFurther, mainFurthest },
+    background: {
+      mainCloser,
+      mainMiddle,
+      mainFar,
+      mainFurther,
+      mainFurthest,
+      error,
+    },
   }) => {
     return css`
       html {
@@ -49,6 +56,19 @@ export const cssStyle = themed(
       img {
         display: block;
         max-width: 100%;
+      }
+      .InvalidSchema {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        justify-content: center;
+      }
+      .InvalidSchema .Bubble {
+        font-size: 1rem;
+        color: ${error};
+        background: ${mainMiddle};
+        padding: 2rem 4rem;
+        border-radius: 5px;
       }
       .EditorDocumentationContainer {
         background: ${mainFar};
@@ -106,20 +126,6 @@ export const cssStyle = themed(
         font-size: 0.75rem;
       }
 
-      .Query {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        color: ${inactive};
-        font-family: inherit;
-        font-size: 16px;
-        font-weight: 400;
-        line-height: 1.5;
-        color: ${text};
-        height: 100%;
-        overflow: hidden;
-      }
-
       .Menu {
         position: absolute;
         min-width: 12.5rem;
@@ -146,25 +152,21 @@ export const cssStyle = themed(
       }
 
       .Menu,
-      .Query,
       .__Type {
         scrollbar-color: ${mainMiddle} ${mainFurthest};
       }
 
       .Menu::-webkit-scrollbar,
-      .Query::-webkit-scrollbar,
       .__Type::-webkit-scrollbar {
         background: ${mainFurthest};
       }
 
       .Menu::-webkit-scrollbar-track,
-      .Query::-webkit-scrollbar-track,
       .__Type::-webkit-scrollbar-track {
         background: ${mainFurthest};
       }
 
       .Menu::-webkit-scrollbar-thumb,
-      .Query::-webkit-scrollbar-thumb,
       .__Type::-webkit-scrollbar-thumb {
         background: ${mainCloser};
       }
@@ -411,10 +413,6 @@ export const cssStyle = themed(
       }
 
       @media (min-width: 768px) {
-        .Query {
-          flex-direction: row;
-          flex-wrap: nowrap;
-        }
         .__Type {
           margin-top: 0;
         }
