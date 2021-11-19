@@ -24,14 +24,12 @@ export interface LiveDocProps {
   css?: string;
   active?: string;
   isStatic?: boolean;
-  logo?: string;
   theme?: EditorTheme;
 }
 export interface LiveDocExportProps {
   schema: string;
   css?: string;
   name?: string;
-  logo?: string;
   theme?: EditorTheme;
 }
 
@@ -39,12 +37,7 @@ let currentScroll: number;
 
 const builtInScalars = [BooleanNode, FloatNode, IDNode, IntNode, StringNode];
 
-export const LiveDocMain = ({
-  schema,
-  active,
-  isStatic,
-  logo,
-}: LiveDocProps) => {
+export const LiveDocMain = ({ schema, active, isStatic }: LiveDocProps) => {
   try {
     const tree = Parser.parse(schema);
     const nodes = tree.nodes.concat(builtInScalars);
@@ -87,7 +80,6 @@ export const LiveDocMain = ({
       enums: enums.map((n) => n.name),
       directives: directives.map((n) => n.name),
       isStatic,
-      logo,
     }) + typeRender}</div>`;
   } catch (error) {
     return `<div class="EditorDocumentationContainer">
@@ -99,7 +91,6 @@ export const LiveDoc = ({
   schema,
   css: originalCss,
   theme = DarkTheme,
-  logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
 }: LiveDocProps) => {
   const [currentType, setCurrentType] = useState<string>();
   const css = originalCss || DetailView.css(theme);
@@ -158,7 +149,7 @@ export const LiveDoc = ({
           height: '100%',
         }}
         dangerouslySetInnerHTML={{
-          __html: LiveDocMain({ schema, logo, active: currentType }),
+          __html: LiveDocMain({ schema, active: currentType }),
         }}
       />
       <style>{css}</style>
@@ -171,7 +162,6 @@ export const LiveDocHtml = async ({
   css: originalCss,
   name = 'graphql-editor',
   theme = DarkTheme,
-  logo = 'https://graphqleditor.com/static/logoText-4ce01b90dc0eba15154a66bdee8f67d6.png',
 }: LiveDocExportProps) => {
   const tree = await Parser.parse(schema);
   const z = new zip();
@@ -190,7 +180,6 @@ export const LiveDocHtml = async ({
     const html = LiveDocMain({
       schema,
       active: at.name,
-      logo,
       isStatic: true,
     });
     const all = DocSkeletonStatic({

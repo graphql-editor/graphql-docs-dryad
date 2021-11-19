@@ -191,7 +191,6 @@ export const RenderSideBar = ({
   schema,
   active,
   isStatic,
-  logo,
 }: {
   types: string[];
   interfaces: string[];
@@ -203,12 +202,11 @@ export const RenderSideBar = ({
   schema: string[];
   active?: string;
   isStatic?: boolean;
-  logo?: string;
 }) => {
   return `
             <div class="Menu" id="Menu">
                 <a class="MenuHeader" ${renderLinkingHome(isStatic)}>
-                    ${logo ? `<img class="Logo" src="${logo}" />` : `Docs`}
+                    Docs
                 </a>
                 <div class="MenuSection">
                     ${typeLinks(schema, 'Schema', active, isStatic)}

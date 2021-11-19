@@ -4,9 +4,6 @@ import { LiveDoc } from '../src/livedoc';
 
 export const Main = () => {
   return (
-    <LiveDoc
-      logo=""
-      schema={featureMoleSchema.library + featureMoleSchema.schema}
-    />
+    <LiveDoc schema={featureMoleSchema.library + featureMoleSchema.schema} />
   );
 };
